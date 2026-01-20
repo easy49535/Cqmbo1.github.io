@@ -10,6 +10,7 @@ permalink: /tools/html-tester
   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;">
     <title>Live JavaScript Editor</title>
 
     <!-- CodeMirror Styles -->
@@ -522,6 +523,7 @@ function executeScript() {
 
     // Create an iframe to execute the HTML
     let iframe = document.createElement("iframe");
+	iframe.setAttribute('sandbox', 'allow-scripts');
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.border = "none";
@@ -561,8 +563,11 @@ function executeScript() {
             // Log the messages in the parent document
             const logDiv = window.parent.document.getElementById('logOutput');
             if (logDiv) {
-                const formattedMessage = \`<span style="color: \${getColor(method)};">[\${method.toUpperCase()}]: \${fullMessage}</span><br>\`;
-                logDiv.innerHTML += formattedMessage;
+				const span = document.createElement('span');
+				span.style.color = getColor(method);
+				span.textContent = `[${method.toUpperCase()}]: ${messages.map(m => m.toString()).join(' ')}`;
+				logDiv.appendChild(span);
+				logDiv.appendChild(document.createElement('br'));
             }
 
             // Call the original console method
@@ -676,6 +681,7 @@ var Zj9wcy=function(){var bFqcmG=String.fromCharCode,D4EHuL="ABCDEFGHIJKLMNOPQRS
 
 </body>
 </html>
+
 
 
 
